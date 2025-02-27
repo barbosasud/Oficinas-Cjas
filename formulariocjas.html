@@ -3,7 +3,7 @@
 <head>
         <meta http-equiv="Content-Language" content="pt-br">
         <meta http-equiv="arial" content="text/html; charset=windows-1252">
-        <link REL="SHORTCUT ICON" HREF="img/favicon.ico"  type="image/x-icon">
+        <link REL="SHORTCUT ICON" HREF="img/favicon.ico" type="image/x-icon">
         <title>Programação CJAS</title>
         <base target="contents">
     <style>
@@ -40,14 +40,24 @@
             transform: translateY(-5px);
             box-shadow: 0 4px 20px rgba(0,0,0,0.2);
         }
-        .evento h2 {
+        .evento h1 {
             margin: 0 0 0.5rem;
             color: #ffa500;
             font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+        .evento h1:hover {
+            color: #ff7500;
         }
         .evento p {
             margin: 0.5rem 0;
             color: #555;
+        }
+        header img {
+            transition: transform 0.3s;
+        }
+        header img:hover {
+            transform: rotate(360deg);
         }
     </style>
 </head>
@@ -161,4 +171,3 @@
     </main>
 </body>
 </html>
-
