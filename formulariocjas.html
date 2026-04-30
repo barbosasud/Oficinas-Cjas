@@ -1,171 +1,1013 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-        <meta http-equiv="Content-Language" content="pt-br">
-        <meta http-equiv="arial" content="text/html; charset=windows-1252">
-        <link REL="SHORTCUT ICON" HREF="img/favicon.ico" type="image/x-icon">
-        <title>Programação CJAS</title>
-        <base target="contents">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programação CJAS 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f7c994;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --gold: #c9933a;
+            --gold-light: #e8b96a;
+            --gold-pale: #f5e6c8;
+            --deep: #0d0a1a;
+            --deep-mid: #1a1430;
+            --deep-card: #130f26;
+            --text: #f0e8d6;
+            --text-muted: #a89880;
+            --accent: rgba(201,147,58,0.15);
         }
+
+        html { scroll-behavior: smooth; }
+
+       body {
+            font-family: 'Montserrat ExtraBold', sans-serif;
+            background-color: #2056a0;
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ── CANVAS BG ── */
+        #bg-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        /* ── HEADER ── */
         header {
-            background-color: #ffa500;
-            color: white;
-            padding: 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: #2056a0;
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(201,147,58,0.2);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .brand-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Montserrat ExtraBold', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--deep);
+            flex-shrink: 0;
+        }
+
+        .brand-text {
+            font-family: 'Montserrat ExtraBold', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 300;
+            letter-spacing: 0.05em;
+            color: var(--text);
+        }
+
+        .brand-text span {
+            color: var(--gold);
+        }
+
+        .header-back {
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .header-back:hover { color: var(--gold); }
+
+        /* ── PAGE HERO ── */
+        .page-hero {
+            position: relative;
+            z-index: 1;
             text-align: center;
-            width: 100%;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            padding: 4rem 2rem 3rem;
         }
-        main {
-            padding: 2rem;
-            width: 80%;
+
+        .page-hero h1 {
+            font-family: 'Montserrat ExtraBold', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 300;
+            color: var(--text);
+            line-height: 1;
         }
-        .evento {
-            background-color: #faecd9;
-            margin: 1rem 0;
-            padding: 1.5rem;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
+
+        .page-hero h1 em {
+            font-style: italic;
+            color: var(--gold-light);
         }
-        .evento:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+
+        .page-hero p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.8rem;
+            letter-spacing: 0.1em;
         }
-        .evento h1 {
-            margin: 0 0 0.5rem;
-            color: #ffa500;
-            font-size: 1.5rem;
-            transition: color 0.3s;
+
+        .gold-line {
+            width: 50px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 1.5rem auto;
         }
-        .evento h1:hover {
-            color: #ff7500;
+
+        /* ── DAY TABS ── */
+        .day-tabs {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0 2rem 2.5rem;
+            flex-wrap: wrap;
         }
-        .evento p {
-            margin: 0.5rem 0;
-            color: #555;
+
+        .day-tab {
+            padding: 0.6rem 1.5rem;
+            border: 1px solid rgba(201,147,58,0.3);
+            background: transparent;
+            color: var(--text-muted);
+            font-family: 'Montserrat ExtraBold', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
-        header img {
+
+        .day-tab::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .day-tab span { position: relative; z-index: 1; }
+
+        .day-tab:hover {
+            color: var(--text);
+            border-color: var(--gold);
+        }
+
+        .day-tab.active {
+            color: var(--deep);
+            border-color: var(--gold);
+        }
+
+        .day-tab.active::before { opacity: 1; }
+
+        /* ── DAY PANEL ── */
+        .day-panel {
+            display: none;
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 2rem 4rem;
+            animation: panelIn 0.5s ease forwards;
+        }
+
+        .day-panel.active { display: block; }
+
+        @keyframes panelIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .day-header {
+            margin-bottom: 2rem;
+        }
+
+        .day-label {
+            font-size: 0.65rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 0.3rem;
+        }
+
+        .day-title {
+            font-family: 'Montserrat ExtraBold', sans-serif;
+            font-size: 2rem;
+            font-weight: 300;
+            color: var(--text);
+        }
+
+        /* ── TIMELINE ── */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: linear-gradient(to bottom, var(--gold), rgba(201,147,58,0.1));
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 0;
+            opacity: 0;
+            transform: translateX(-10px);
+            animation: itemIn 0.4s ease forwards;
+        }
+
+        @keyframes itemIn {
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .timeline-item:nth-child(1)  { animation-delay: 0.05s; }
+        .timeline-item:nth-child(2)  { animation-delay: 0.10s; }
+        .timeline-item:nth-child(3)  { animation-delay: 0.15s; }
+        .timeline-item:nth-child(4)  { animation-delay: 0.20s; }
+        .timeline-item:nth-child(5)  { animation-delay: 0.25s; }
+        .timeline-item:nth-child(6)  { animation-delay: 0.30s; }
+        .timeline-item:nth-child(7)  { animation-delay: 0.35s; }
+        .timeline-item:nth-child(8)  { animation-delay: 0.40s; }
+        .timeline-item:nth-child(9)  { animation-delay: 0.45s; }
+        .timeline-item:nth-child(10) { animation-delay: 0.50s; }
+        .timeline-item:nth-child(11) { animation-delay: 0.55s; }
+        .timeline-item:nth-child(12) { animation-delay: 0.60s; }
+        .timeline-item:nth-child(13) { animation-delay: 0.65s; }
+        .timeline-item:nth-child(14) { animation-delay: 0.70s; }
+
+        .timeline-dot {
+            position: absolute;
+            left: -2.35rem;
+            top: 1.2rem;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--gold);
+            box-shadow: 0 0 8px rgba(201,147,58,0.5);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .timeline-card {
+            background: var(--deep-card);
+            border: 1px solid rgba(201,147,58,0.1);
+            border-radius: 4px;
+            padding: 1rem 1.2rem;
+            margin-bottom: 0.6rem;
+            cursor: pointer;
+            transition: border-color 0.3s, transform 0.2s, background 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .timeline-card::after {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--gold), var(--gold-light));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .timeline-card:hover {
+            border-color: rgba(201,147,58,0.35);
+            transform: translateX(4px);
+            background: rgba(201,147,58,0.06);
+        }
+
+        .timeline-card:hover::after,
+        .timeline-card.open::after { opacity: 1; }
+
+        .timeline-card.open {
+            border-color: rgba(201,147,58,0.35);
+            background: rgba(201,147,58,0.06);
+        }
+
+        .card-top {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            justify-content: space-between;
+        }
+
+        .card-time {
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            color: var(--gold);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .card-title {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: var(--text);
+            flex: 1;
+        }
+
+        .card-chevron {
+            font-size: 0.7rem;
+            color: var(--text-muted);
             transition: transform 0.3s;
+            flex-shrink: 0;
         }
-        header img:hover {
-            transform: rotate(360deg);
+
+        .timeline-card.open .card-chevron {
+            transform: rotate(180deg);
+            color: var(--gold);
+        }
+
+        .card-body {
+            display: none;
+            padding-top: 0.8rem;
+            margin-top: 0.8rem;
+            border-top: 1px solid rgba(201,147,58,0.15);
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        .timeline-card.open .card-body { display: block; }
+
+        .card-tag {
+            display: inline-block;
+            margin-top: 0.6rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 2rem;
+            background: rgba(201,147,58,0.12);
+            border: 1px solid rgba(201,147,58,0.25);
+            font-size: 0.65rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--gold);
+        }
+
+        /* ── PROGRESS BAR ── */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--gold), var(--gold-light));
+            z-index: 200;
+            transition: width 0.3s;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid rgba(201,147,58,0.15);
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            letter-spacing: 0.1em;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 600px) {
+            .timeline { padding-left: 1.5rem; }
+            .timeline-dot { left: -1.85rem; }
+            .card-top { flex-wrap: wrap; gap: 0.4rem; }
         }
     </style>
 </head>
 <body>
+    <canvas id="bg-canvas"></canvas>
+    <div class="progress-bar" id="progress"></div>
+
     <header>
-        <img src="img/pense celestial.PNG" alt="" width="100px">
-        <h1>Programação CJAS 2025</h1> 
+        <div class="header-brand">
+            <div class="brand-icon">C</div>
+            <div class="brand-text">CJAS <span>2026</span></div>
+        </div>
+        <a href="index.html" class="header-back">← Início</a>
     </header>
-    <main>
-        <div class="evento">
-            <h1>Dia 1 (Sábado)</h1>
-            <ul>
-                <li>7h30-9h30: Chegada</li>
-                <br>
-                <li>9h30-10h: Abertura da conferência com boas-vindas e introdução ao tema.</li>
-                <br>
-                <li>10h-11h: Atividade quebra-gelo (Grupos de conexão).</li>
-                <br>
-                <li>11h-13h: Almoço e tempo de socialização.</li>
-                <br>
-                <li>13h-13h30: Introdução ao princípio da autossuficiência.</li>
-                <br>
-                <li>13h30-14h30: Oficinas temáticas (planejamento de carreira, entrando no
-                    mercado de trabalho, empreendedorismo, habilidades para a vida).</li>
-                <br>
-                <li>14h30-15h30: Tarde de jogos e recreação.</li>
-                <br>
-                <li>15h30-16h30: Conversa rápida e lanche da tarde.</li>
-                <br>
-                <li>16h30-17h30: Aulão “Escolhas para a eternidade”.</li>
-                <br>
-                <li>17h30-19:30: Alojamento dos Participantes e Tempo para banho e preparação para o lual.</li>
-                <br>
-                <li>20:00-20:30 Jantar</li>
-                <br>
-                <li>20h30-23h: Luau</li>
-                <br>
-                <li>23h-23h30: Tempo de reflexão.</li>
-                <br>
-            </ul>
+
+    <section class="page-hero">
+        <h1>Programação <em>Completa</em></h1>
+        <p>Sábado a Terça</p>
+        <div class="gold-line"></div>
+    </section>
+
+    <div class="day-tabs">
+        <button class="day-tab active" onclick="showDay(0, this)"><span>Dia 1 — Sábado</span></button>
+        <button class="day-tab" onclick="showDay(1, this)"><span>Dia 2 — Domingo</span></button>
+        <button class="day-tab" onclick="showDay(2, this)"><span>Dia 3 — Segunda</span></button>
+        <button class="day-tab" onclick="showDay(3, this)"><span>Dia 4 — Terça</span></button>
+    </div>
+
+    <!-- DIA 1 -->
+    <div class="day-panel active" id="day-0">
+        <div class="day-header">
+            <div class="day-label">Primeiro Dia</div>
+            <div class="day-title">Sábado — Chegada e Abertura</div>
         </div>
-        <div class="evento">
-            <h1>Dia 2 (Domingo)</h1>
-            <ul>
-                <li>7h30-9h30: Desjejum e socialização. (Translado para o Transamerica saída às 08:45</li>
-                <br>
-                <li>9h30-10h30: Reunião sacramental.</li>
-                <br>
-                <li>10h30-11h30: Escola dominical.</li>
-                <br>
-                <li>111h30-13h30: Almoço e socialização.</li>
-                <br>
-                <li>13h30-14h: Tempo livre.</li>
-                <br>
-                <li>14h-15h: Atividades para escolher (grupos de estudo, buscar respostas,
-                    reconhecer o Espírito).</li>
-                <br>
-                <li>15h-16h: FamilySearch e lanche da tarde.</li>
-                <br>
-                <li>16h-17h: Perguntas e respostas sobre saúde mental.</li>
-                <br>
-                <li>17h-18h: Atividades para escolher (diário de gratidão, resiliência
-                    emocional).</li>
-                <br>
-                <li>18h-19h: Jantar e socialização.</li>
-                <br>
-                <li>Programa musical “Vinde a Cristo”.</li>
-                <br>
-                <li>20h-21h: Devocional nacional “Pense celestial”.</li>
-                <br>
-                <li>21h-22h: Reunião de testemunhos.</li>
-                <br>
-                <li>22h-22h30: Tempo de reflexão.</li>
-                <br>
-            </ul>
+        <div class="timeline">
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">07h30 – 09h30</div>
+                        <div class="card-title">Chegada dos participantes</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">Recepção e acomodação dos participantes. Momento de boas-vindas e orientações gerais sobre o evento.<span class="card-tag">Recepção</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">09h30 – 10h</div>
+                        <div class="card-title">Abertura da Conferência</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">Boas-vindas oficiais e introdução ao tema central do encontro, preparando o coração de todos para os dias que virão.<span class="card-tag">Abertura</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">10h – 11h</div>
+                        <div class="card-title">Atividade Quebra-Gelo</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">Grupos de conexão para aproximar os participantes, criar laços e preparar o ambiente para os momentos de aprendizado.<span class="card-tag">Dinâmica</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">11h – 13h</div>
+                        <div class="card-title">Almoço e Socialização</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">Tempo de refeição e convivência livre entre os participantes.<span class="card-tag">Refeição</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">13h – 13h30</div>
+                        <div class="card-title">Princípio da Autossuficiência</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">Introdução ao princípio gospel da autossuficiência: como nos tornarmos independentes, sábios e responsáveis em nossas escolhas temporais.<span class="card-tag">Ensino</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">13h30 – 14h30</div>
+                        <div class="card-title">Oficinas Temáticas</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">Escolha sua trilha: <strong>Planejamento de carreira</strong> · <strong>Mercado de trabalho</strong> · <strong>Empreendedorismo</strong> · <strong>Habilidades para a vida</strong>. Cada grupo em ambiente interativo e prático.<span class="card-tag">Oficinas</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">14h30 – 15h30</div>
+                        <div class="card-title">Tarde de Jogos e Recreação</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">Atividades recreativas e jogos coletivos para fortalecer os vínculos entre os participantes.<span class="card-tag">Lazer</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">15h30 – 16h30</div>
+                        <div class="card-title">Conversa Rápida e Lanche</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">Lanche da tarde com momento de conversa e partilha entre os participantes.<span class="card-tag">Lanche</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">16h30 – 17h30</div>
+                        <div class="card-title">Aulão — "Escolhas para a Eternidade"</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">Uma aula poderosa sobre como nossas escolhas diárias moldam nosso destino eterno. Reflexão profunda e inspiradora.<span class="card-tag">Destaque</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">17h30 – 19h30</div>
+                        <div class="card-title">Alojamento e Preparação para o Luau</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">Tempo livre para descanso, banho e preparação para a grande festa da noite.<span class="card-tag">Livre</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">20h – 20h30</div>
+                        <div class="card-title">Jantar</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">Jantar especial para os participantes.<span class="card-tag">Refeição</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">20h30 – 23h</div>
+                        <div class="card-title">🌊 Luau</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">Noite de festa, música e celebração. Um momento especial de alegria e confraternização entre todos os participantes.<span class="card-tag">Festa</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">23h – 23h30</div>
+                        <div class="card-title">Tempo de Reflexão</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">Encerramento do dia com meditação, oração e reflexão pessoal sobre as experiências vividas.<span class="card-tag">Reflexão</span></div>
+                </div>
+            </div>
+
         </div>
-        <div class="evento">
-            <h1>Dia 3 (Segunda)</h1>
-            <ul>
-                <li>7h30-9h30: Desjejum e socialização. (Translado para o Transamerica saída às 08:45</li>
-                <br>
-                <li>9h30-11h30: Projeto de serviço comunitário</li>
-                <br>
-                <li>11h30-13h30: Almoço e socialização.</li>
-                <br>
-                <li>13h30-14h: Introdução ao princípio da educação.</li>
-                <br>
-                <li>14h-15h: Oficinas de educação (redação, técnicas de estudo, escolhas
-                    educacionais).</li>
-                <br>
-                <li>15h-16:30h: Tarde de jogos e lanche.</li>
-                <br>
-                <li>16h:30-17h:30: Encerramento da conferência “O Senhor Jesus Cristo voltará”.</li>
-                <br>
-                <li>17h:30-19h30: Preparação para o baile.</li>
-                <br>
-                <li>19h:30-23h:30: Baile - Jantar</li>
-            </ul>
+    </div>
+
+    <!-- DIA 2 -->
+    <div class="day-panel" id="day-1">
+        <div class="day-header">
+            <div class="day-label">Segundo Dia</div>
+            <div class="day-title">Domingo — Adoração e Crescimento</div>
         </div>
-        <div class="evento">
-            <h1>Dia 4 (Terça)</h1>
-            <ul>
-                <li>7h30-9h30: Desjejum e socialização. (Translado para o Transamerica saída às 08:45</li>
-                <br>
-                <li>10h: Saída dos ônibus.</li>
-                <br>
-            </ul>
+        <div class="timeline">
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">07h30 – 09h30</div>
+                        <div class="card-title">Desjejum e Socialização</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">Café da manhã coletivo. <strong>Atenção:</strong> Translado para o Transamerica — saída às 08h45.<span class="card-tag">Refeição</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">09h30 – 10h30</div>
+                        <div class="card-title">Reunião Sacramental</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">Momento sagrado de adoração e renovação de alianças. Um dos momentos mais importantes do fim de semana.<span class="card-tag">Espiritual</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">10h30 – 11h30</div>
+                        <div class="card-title">Escola Dominical</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">Estudo das escrituras em grupos. Aprendizado conjunto e edificante para fortalecer a fé.<span class="card-tag">Estudo</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">11h30 – 13h30</div>
+                        <div class="card-title">Almoço e Socialização</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">Almoço em conjunto com tempo de convivência.<span class="card-tag">Refeição</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">13h30 – 14h</div>
+                        <div class="card-title">Tempo Livre</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">Momento para descanso, reflexão pessoal ou conversas informais.<span class="card-tag">Livre</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">14h – 15h</div>
+                        <div class="card-title">Atividades à Escolher</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">Três trilhas disponíveis: <strong>Grupos de estudo</strong> · <strong>Buscar respostas</strong> · <strong>Reconhecer o Espírito</strong>. Cada participante escolhe conforme sua necessidade espiritual.<span class="card-tag">Opcional</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">15h – 16h</div>
+                        <div class="card-title">FamilySearch e Lanche</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">Exploração das raízes familiares com FamilySearch, seguida do lanche da tarde.<span class="card-tag">Família</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">16h – 17h</div>
+                        <div class="card-title">Saúde Mental — Perguntas e Respostas</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">Conversa aberta e acolhedora sobre saúde mental, bem-estar emocional e como cuidar de si mesmo com o auxílio do Evangelho.<span class="card-tag">Bem-estar</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">17h – 18h</div>
+                        <div class="card-title">Atividades à Escolher</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">Trilhas disponíveis: <strong>Diário de gratidão</strong> · <strong>Resiliência emocional</strong>. Exercícios práticos de crescimento pessoal.<span class="card-tag">Opcional</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">18h – 19h</div>
+                        <div class="card-title">Jantar e Socialização</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">Jantar coletivo com tempo de convivência.<span class="card-tag">Refeição</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">19h – 20h</div>
+                        <div class="card-title">🎵 Programa Musical "Vinde a Cristo"</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">Uma celebração musical especial para elevar os corações e preparar o espírito para o devocional nacional.<span class="card-tag">Música</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">20h – 21h</div>
+                        <div class="card-title">✨ Devocional Nacional "Pense Celestial"</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">O momento mais esperado: devocional transmitido para todo o Brasil. Uma mensagem inspirada para todos os jovens adultos solteiros.<span class="card-tag">Destaque</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">21h – 22h</div>
+                        <div class="card-title">Reunião de Testemunhos</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">Momento aberto para partilhar testemunhos, gratidão e experiências espirituais vividas durante o evento.<span class="card-tag">Espiritual</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">22h – 22h30</div>
+                        <div class="card-title">Tempo de Reflexão</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">Encerramento do dia em oração e silêncio contemplativo.<span class="card-tag">Reflexão</span></div>
+                </div>
+            </div>
+
         </div>
-    </main>
+    </div>
+
+    <!-- DIA 3 -->
+    <div class="day-panel" id="day-2">
+        <div class="day-header">
+            <div class="day-label">Terceiro Dia</div>
+            <div class="day-title">Segunda — Serviço e Celebração</div>
+        </div>
+        <div class="timeline">
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">07h30 – 09h30</div>
+                        <div class="card-title">Desjejum e Socialização</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">Café da manhã coletivo. <strong>Atenção:</strong> Translado para o Transamerica — saída às 08h45.<span class="card-tag">Refeição</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">09h30 – 11h30</div>
+                        <div class="card-title">🤝 Projeto de Serviço Comunitário</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">Colocamos a fé em ação! Projeto de serviço à comunidade local — uma oportunidade de ser as mãos do Senhor.<span class="card-tag">Serviço</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">11h30 – 13h30</div>
+                        <div class="card-title">Almoço e Socialização</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">Almoço em conjunto com tempo de convivência.<span class="card-tag">Refeição</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">13h30 – 14h</div>
+                        <div class="card-title">Princípio da Educação</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">Introdução ao princípio gospel da educação: aprender é um mandamento eterno. Por que educação importa na perspectiva do Evangelho.<span class="card-tag">Ensino</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">14h – 15h</div>
+                        <div class="card-title">Oficinas de Educação</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">Trilhas práticas: <strong>Redação</strong> · <strong>Técnicas de estudo</strong> · <strong>Escolhas educacionais</strong>. Ferramentas concretas para o sucesso acadêmico e profissional.<span class="card-tag">Oficinas</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">15h – 16h30</div>
+                        <div class="card-title">Tarde de Jogos e Lanche</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">Atividades recreativas e lanche da tarde para recarregar as energias antes do encerramento.<span class="card-tag">Lazer</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">16h30 – 17h30</div>
+                        <div class="card-title">✝️ Encerramento — "O Senhor Jesus Cristo Voltará"</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">Momento culminante da conferência: uma mensagem poderosa sobre a Segunda Vinda e como nos prepararmos com fé e esperança.<span class="card-tag">Destaque</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">17h30 – 19h30</div>
+                        <div class="card-title">Preparação para o Baile</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">Tempo para se arrumar, descansar e se preparar para a grande festa de encerramento.<span class="card-tag">Livre</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">19h30 – 23h30</div>
+                        <div class="card-title">💃 Baile e Jantar</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">A grande celebração final! Baile e jantar especial para encerrar com alegria, gratidão e memórias inesquecíveis.<span class="card-tag">Festa</span></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- DIA 4 -->
+    <div class="day-panel" id="day-3">
+        <div class="day-header">
+            <div class="day-label">Quarto Dia</div>
+            <div class="day-title">Terça — Despedida</div>
+        </div>
+        <div class="timeline">
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">07h30 – 09h30</div>
+                        <div class="card-title">Desjejum e Socialização</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">Último café da manhã juntos. <strong>Atenção:</strong> Translado para o Transamerica — saída às 08h45.<span class="card-tag">Refeição</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card" onclick="toggleCard(this)">
+                    <div class="card-top">
+                        <div class="card-time">10h</div>
+                        <div class="card-title">🚌 Saída dos Ônibus</div>
+                        <div class="card-chevron">▼</div>
+                    </div>
+                    <div class="card-body">Partida dos participantes. Que as memórias, os laços e os ensinamentos do CJAS 2025 permaneçam em cada coração. Até a próxima!<span class="card-tag">Encerramento</span></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        CJAS 2025 · Pense Celestial · Conferência Jovem Adulta Solteira
+    </footer>
+
+    <script>
+        // ── TAB SWITCHING ──
+        function showDay(index, btn) {
+            document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.day-panel').forEach(p => p.classList.remove('active'));
+            btn.classList.add('active');
+            const panel = document.getElementById('day-' + index);
+            panel.classList.add('active');
+            // re-trigger animations
+            panel.querySelectorAll('.timeline-item').forEach(item => {
+                item.style.animation = 'none';
+                item.offsetHeight;
+                item.style.animation = '';
+            });
+        }
+
+        // ── CARD TOGGLE ──
+        function toggleCard(card) {
+            const wasOpen = card.classList.contains('open');
+            // close siblings
+            card.closest('.timeline').querySelectorAll('.timeline-card').forEach(c => c.classList.remove('open'));
+            if (!wasOpen) card.classList.add('open');
+        }
+
+        // ── SCROLL PROGRESS ──
+        window.addEventListener('scroll', () => {
+            const doc = document.documentElement;
+            const scrolled = doc.scrollTop / (doc.scrollHeight - doc.clientHeight);
+            document.getElementById('progress').style.width = (scrolled * 100) + '%';
+        });
+
+        // ── STAR BG ──
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        function initStars() {
+            stars = [];
+            const n = Math.floor((canvas.width * canvas.height) / 6000);
+            for (let i = 0; i < n; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    r: Math.random() * 1 + 0.2,
+                    speed: Math.random() * 0.15 + 0.03,
+                    p: Math.random() * Math.PI * 2
+                });
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (const s of stars) {
+                s.p += 0.008;
+                const op = 0.15 + 0.25 * Math.sin(s.p);
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255,240,200,${op})`;
+                ctx.fill();
+                s.y += s.speed;
+                if (s.y > canvas.height) { s.y = 0; s.x = Math.random() * canvas.width; }
+            }
+            requestAnimationFrame(draw);
+        }
+
+        window.addEventListener('resize', () => { resize(); initStars(); });
+        resize(); initStars(); draw();
+    </script>
 </body>
 </html>
