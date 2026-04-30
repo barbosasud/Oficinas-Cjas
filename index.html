@@ -3,41 +3,275 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página Inicial</title>
+    <title>CJAS GYN - BSB 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --gold: #ebbe8c;
+            --gold-light: #e8b96a;
+            --gold-pale: #f5e6c8;
+            --deep: #0d0a1a;
+            --deep-mid: #1a1430;
+            --text: #f0e8d6;
+            --text-muted: #a89880;
+        }
+
+        html { scroll-behavior: smooth; }
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f8ff;
-            color: #333;
+            font-family: 'Montserrat ExtraBold', sans-serif;
+            background-color: #2056a0;
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ── STAR CANVAS ── */
+        #stars-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ── HERO ── */
+        .hero {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            margin: 0;
+            text-align: center;
+            padding: 2rem;
+            background: radial-gradient(ellipse at 50% 60%, rgba(58, 163, 201, 0.12) 0%, transparent 70%);
         }
-        h1 {
-            color: #4169e1;
+
+        .hero-badge {
+            font-family: 'Montserrat SemiBold', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 500;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--gold);
+            border: 4px solid rgba(201,147,58,0.4);
+            padding: 0.4rem 1.2rem;
+            border-radius: 2rem;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 0.3s forwards;
         }
-        a {
+
+        .hero-title {
+            font-family: 'Montserrat SemiBold', sans-serif;
+            font-size: clamp(4rem, 10vw, 8rem);
+            font-weight: 400;
+            line-height: 0.95;
+            letter-spacing: -0.02em;
+            color: var(--text);
+            opacity: 0;
+            animation: fadeUp 0.9s ease 0.5s forwards;
+        }
+
+        .hero-title em {
+            font-style: italic;
+            color: var(--gold-light);
+            display: block;
+        }
+
+        .hero-subtitle {
+            font-family: 'Montserrat SemiBold', sans-serif;
+            font-size: clamp(1rem, 2.5vw, 1.4rem);
+            font-weight: 300;
+            font-style: italic;
+            color: var(--text-muted);
+            margin-top: 1.5rem;
+            opacity: 0;
+            animation: fadeUp 0.9s ease 0.7s forwards;
+        }
+
+        .hero-divider {
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 2rem auto;
+            opacity: 0;
+            animation: fadeIn 1s ease 0.9s forwards;
+        }
+
+        .hero-info {
+            display: flex;
+            gap: 2.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeUp 0.9s ease 1s forwards;
+        }
+
+        .hero-info-item {
+            text-align: center;
+        }
+
+        .hero-info-item .label {
+            font-family: 'Montserrat SemiBold', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 0.3rem;
+        }
+
+        .hero-info-item .value {
+            font-family: 'Montserrat SemiBold', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 300;
+            color: var(--text);
+        }
+
+        .hero-cta {
+            margin-top: 3rem;
+            opacity: 0;
+            animation: fadeUp 0.9s ease 1.2s forwards;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            padding: 0.85rem 2.5rem;
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            color: var(--deep);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
             text-decoration: none;
-            color: #ff4500;
-            font-weight: bold;
-            margin-top: 20px;
-            padding: 10px 20px;
-            border: 2px solid #ff4500;
-            border-radius: 5px;
-            transition: background-color 0.3s, color 0.3s;
+            border-radius: 2px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s;
+            box-shadow: 0 0 30px rgba(201,147,58,0.3);
         }
-        a:hover {
-            background-color: #ff4500;
-            color: #fff;
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 40px rgba(201,147,58,0.5);
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0;
+            animation: fadeIn 1s ease 1.8s forwards;
+        }
+
+        .scroll-hint span {
+            font-size: 0.6rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--gold), transparent);
+            animation: scrollPulse 2s ease infinite;
+        }
+
+        /* ── ANIMATIONS ── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+        @keyframes scrollPulse {
+            0%, 100% { opacity: 0.3; transform: scaleY(1); }
+            50% { opacity: 1; transform: scaleY(1.1); }
         }
     </style>
 </head>
 <body>
-    <h1>Bem-vindo ao CJAS 2025 </h1>
-    <p>Clique no link abaixo para ser direcionado às Oficinas.</p>
-    <a href="formulariocjas.html">Ir para as Oficinas</a>
+    <canvas id="stars-canvas"></canvas>
+
+    <section class="hero">
+        <div class="hero-badge">Conferência JAS Goiânia - Brasília</div>
+        <h1 class="hero-title">CJAS<br><em>2026</em></h1>
+        <div class="hero-divider"></div>
+        <div class="hero-info">
+            <div class="hero-info-item">
+                <div class="label">Data</div>
+                <div class="value">3 dias de encontro</div>
+            </div>
+            <div class="hero-info-item">
+                <div class="label">Programação</div>
+                <div class="value">10/12 → 12/12</div>
+            </div>
+        </div>
+        <div class="hero-cta">
+            <a href="formulariocjas.html" class="btn-primary">Ver Programação Completa</a>
+        </div>
+        <br><br>
+        <div class="scroll-hint">
+            <span>Explorar</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <script>
+        // Starfield canvas
+        const canvas = document.getElementById('stars-canvas');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        function initStars() {
+            stars = [];
+            const count = Math.floor((canvas.width * canvas.height) / 5000);
+            for (let i = 0; i < count; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    r: Math.random() * 1.2 + 0.2,
+                    speed: Math.random() * 0.3 + 0.05,
+                    opacity: Math.random(),
+                    pulse: Math.random() * Math.PI * 2
+                });
+            }
+        }
+
+        function drawStars(t) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (const s of stars) {
+                s.pulse += 0.01;
+                const op = 0.3 + 0.4 * Math.sin(s.pulse);
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255,240,200,${op})`;
+                ctx.fill();
+                s.y += s.speed;
+                if (s.y > canvas.height) { s.y = 0; s.x = Math.random() * canvas.width; }
+            }
+            requestAnimationFrame(drawStars);
+        }
+
+        window.addEventListener('resize', () => { resize(); initStars(); });
+        resize();
+        initStars();
+        requestAnimationFrame(drawStars);
+    </script>
 </body>
 </html>
