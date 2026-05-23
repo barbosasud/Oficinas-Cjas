@@ -3,37 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CJAS GYN - BSB 2026</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <title>CJAS 2026 · GYN–BSB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
             --gold: #ebbe8c;
-            --gold-light: #e8b96a;
+            --gold-vivid: #d4a05a;
             --gold-pale: #f5e6c8;
-            --deep: #0d0a1a;
-            --deep-mid: #1a1430;
+            --blue: #2056a0;
+            --blue-dark: #163878;
+            --blue-deeper: #0e2455;
             --text: #f0e8d6;
-            --text-muted: #a89880;
+            --text-muted: #a8b8cc;
+            --card-bg: rgba(255,255,255,0.04);
         }
 
         html { scroll-behavior: smooth; }
 
         body {
-            font-family: 'Montserrat ExtraBold', sans-serif;
-            background-color: #2056a0;
+            font-family: 'DM Sans', sans-serif;
+            background: var(--blue-deeper);
             color: var(--text);
             min-height: 100vh;
             overflow-x: hidden;
         }
 
-        /* ── STAR CANVAS ── */
+        /* ── CANVAS ── */
         #stars-canvas {
             position: fixed;
             inset: 0;
             z-index: 0;
             pointer-events: none;
+        }
+
+        /* ── NOISE OVERLAY ── */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            opacity: 0.4;
         }
 
         /* ── HERO ── */
@@ -46,118 +59,196 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 2rem;
-            background: radial-gradient(ellipse at 50% 60%, rgba(58, 163, 201, 0.12) 0%, transparent 70%);
+            padding: 3rem 1.5rem 5rem;
+            background:
+                radial-gradient(ellipse 80% 50% at 50% 100%, rgba(32,86,160,0.5) 0%, transparent 60%),
+                radial-gradient(ellipse 40% 60% at 50% 50%, rgba(212,160,90,0.06) 0%, transparent 60%);
         }
 
+        /* ── LOGO EMBLEM ── */
+        .emblem {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 2rem;
+            opacity: 0;
+            animation: fadeDown 0.7s ease 0.2s forwards;
+        }
+
+        .emblem svg { width: 100%; height: 100%; }
+
+        /* ── BADGE ── */
         .hero-badge {
-            font-family: 'Montserrat SemiBold', sans-serif;
-            font-size: 1.25rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.7rem;
             font-weight: 500;
-            letter-spacing: 0.3em;
+            letter-spacing: 0.25em;
             text-transform: uppercase;
             color: var(--gold);
-            border: 4px solid rgba(201,147,58,0.4);
-            padding: 0.4rem 1.2rem;
-            border-radius: 2rem;
-            margin-bottom: 2.5rem;
+            border: 1px solid rgba(235,190,140,0.35);
+            padding: 0.45rem 1.2rem;
+            border-radius: 100px;
+            margin-bottom: 2rem;
             opacity: 0;
-            animation: fadeUp 0.8s ease 0.3s forwards;
+            animation: fadeDown 0.7s ease 0.35s forwards;
+            backdrop-filter: blur(8px);
+            background: rgba(235,190,140,0.05);
         }
 
+        .badge-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--gold-vivid);
+            animation: pulse 2s ease infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.7); }
+        }
+
+        /* ── TITLE ── */
         .hero-title {
-            font-family: 'Montserrat SemiBold', sans-serif;
-            font-size: clamp(4rem, 10vw, 8rem);
-            font-weight: 400;
-            line-height: 0.95;
-            letter-spacing: -0.02em;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(5rem, 18vw, 12rem);
+            font-weight: 700;
+            line-height: 0.85;
+            letter-spacing: -0.03em;
             color: var(--text);
             opacity: 0;
             animation: fadeUp 0.9s ease 0.5s forwards;
         }
 
-        .hero-title em {
-            font-style: italic;
-            color: var(--gold-light);
+        .hero-title .year {
             display: block;
+            font-style: italic;
+            font-weight: 400;
+            color: var(--gold);
+            font-size: 0.7em;
+            letter-spacing: 0;
+            line-height: 1.1;
         }
 
-        .hero-subtitle {
-            font-family: 'Montserrat SemiBold', sans-serif;
-            font-size: clamp(1rem, 2.5vw, 1.4rem);
+        /* ── TAGLINE ── */
+        .hero-tagline {
+            font-size: clamp(0.8rem, 2vw, 1rem);
             font-weight: 300;
-            font-style: italic;
             color: var(--text-muted);
             margin-top: 1.5rem;
+            letter-spacing: 0.08em;
             opacity: 0;
             animation: fadeUp 0.9s ease 0.7s forwards;
         }
 
-        .hero-divider {
-            width: 60px;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--gold), transparent);
-            margin: 2rem auto;
+        /* ── DIVIDER ── */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 2.5rem auto;
+            width: 200px;
             opacity: 0;
             animation: fadeIn 1s ease 0.9s forwards;
         }
 
-        .hero-info {
+        .divider-line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(235,190,140,0.4));
+        }
+
+        .divider-line:last-child {
+            background: linear-gradient(90deg, rgba(235,190,140,0.4), transparent);
+        }
+
+        .divider-diamond {
+            width: 6px;
+            height: 6px;
+            background: var(--gold-vivid);
+            transform: rotate(45deg);
+        }
+
+        /* ── INFO CARDS ── */
+        .info-grid {
             display: flex;
-            gap: 2.5rem;
+            gap: 1rem;
             justify-content: center;
             flex-wrap: wrap;
             opacity: 0;
             animation: fadeUp 0.9s ease 1s forwards;
+            margin-bottom: 2.5rem;
         }
 
-        .hero-info-item {
+        .info-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(235,190,140,0.15);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
             text-align: center;
+            backdrop-filter: blur(12px);
+            min-width: 130px;
+            transition: border-color 0.3s, transform 0.3s;
         }
 
-        .hero-info-item .label {
-            font-family: 'Montserrat SemiBold', sans-serif;
-            font-size: 0.85rem;
+        .info-card:hover {
+            border-color: rgba(235,190,140,0.4);
+            transform: translateY(-3px);
+        }
+
+        .info-card .label {
+            font-size: 0.6rem;
             letter-spacing: 0.25em;
             text-transform: uppercase;
             color: var(--gold);
-            margin-bottom: 0.3rem;
+            margin-bottom: 0.4rem;
+            font-weight: 500;
         }
 
-        .hero-info-item .value {
-            font-family: 'Montserrat SemiBold', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 300;
+        .info-card .value {
+            font-size: 1rem;
+            font-weight: 400;
             color: var(--text);
+            font-family: 'Playfair Display', serif;
         }
 
+        /* ── CTA ── */
         .hero-cta {
-            margin-top: 3rem;
             opacity: 0;
             animation: fadeUp 0.9s ease 1.2s forwards;
         }
 
         .btn-primary {
-            display: inline-block;
-            padding: 0.85rem 2.5rem;
-            background: linear-gradient(135deg, var(--gold), var(--gold-light));
-            color: var(--deep);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 1rem 2.2rem;
+            background: linear-gradient(135deg, var(--gold-vivid), var(--gold));
+            color: var(--blue-deeper);
             font-family: 'DM Sans', sans-serif;
             font-size: 0.8rem;
-            font-weight: 500;
-            letter-spacing: 0.15em;
+            font-weight: 600;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
             text-decoration: none;
-            border-radius: 2px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s;
-            box-shadow: 0 0 30px rgba(201,147,58,0.3);
+            border-radius: 100px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 0 40px rgba(212,160,90,0.25), 0 4px 20px rgba(0,0,0,0.3);
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 40px rgba(201,147,58,0.5);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 0 60px rgba(212,160,90,0.4), 0 8px 30px rgba(0,0,0,0.3);
         }
 
+        .btn-arrow {
+            transition: transform 0.3s;
+        }
+
+        .btn-primary:hover .btn-arrow { transform: translateX(4px); }
+
+        /* ── SCROLL HINT ── */
         .scroll-hint {
             position: absolute;
             bottom: 2rem;
@@ -168,24 +259,119 @@
             align-items: center;
             gap: 0.5rem;
             opacity: 0;
-            animation: fadeIn 1s ease 1.8s forwards;
+            animation: fadeIn 1s ease 2s forwards;
         }
 
         .scroll-hint span {
-            font-size: 0.6rem;
-            letter-spacing: 0.2em;
+            font-size: 0.55rem;
+            letter-spacing: 0.25em;
             text-transform: uppercase;
             color: var(--text-muted);
         }
 
-        .scroll-line {
-            width: 1px;
-            height: 40px;
-            background: linear-gradient(to bottom, var(--gold), transparent);
-            animation: scrollPulse 2s ease infinite;
+        .scroll-mouse {
+            width: 20px;
+            height: 32px;
+            border: 1.5px solid rgba(235,190,140,0.3);
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            padding-top: 5px;
+        }
+
+        .scroll-wheel {
+            width: 3px;
+            height: 6px;
+            background: var(--gold);
+            border-radius: 2px;
+            animation: scrollWheel 1.8s ease infinite;
+        }
+
+        @keyframes scrollWheel {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(10px); opacity: 0; }
+        }
+
+        /* ── ABOUT SECTION ── */
+        .about {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 4rem 2rem 6rem;
+        }
+
+        .section-label {
+            font-size: 0.65rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .about-heading {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1.15;
+            color: var(--text);
+            margin-bottom: 1.5rem;
+        }
+
+        .about-heading em { font-style: italic; color: var(--gold); }
+
+        .about-text {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin-bottom: 3rem;
+        }
+
+        .pillars {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .pillar-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(235,190,140,0.12);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: border-color 0.3s, transform 0.3s, background 0.3s;
+        }
+
+        .pillar-card:hover {
+            border-color: rgba(235,190,140,0.35);
+            transform: translateY(-4px);
+            background: rgba(235,190,140,0.04);
+        }
+
+        .pillar-icon {
+            font-size: 1.8rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .pillar-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            color: var(--text);
+            margin-bottom: 0.4rem;
+        }
+
+        .pillar-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.6;
         }
 
         /* ── ANIMATIONS ── */
+        @keyframes fadeDown {
+            from { opacity: 0; transform: translateY(-16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(20px); }
             to   { opacity: 1; transform: translateY(0); }
@@ -194,9 +380,13 @@
             from { opacity: 0; }
             to   { opacity: 1; }
         }
-        @keyframes scrollPulse {
-            0%, 100% { opacity: 0.3; transform: scaleY(1); }
-            50% { opacity: 1; transform: scaleY(1.1); }
+
+        /* ── MOBILE ── */
+        @media (max-width: 480px) {
+            .hero-title { font-size: clamp(4.5rem, 22vw, 7rem); }
+            .info-card { min-width: 110px; padding: 0.8rem 1rem; }
+            .btn-primary { padding: 0.9rem 1.8rem; font-size: 0.75rem; }
+            .about { padding: 3rem 1.2rem 4rem; }
         }
     </style>
 </head>
@@ -204,31 +394,102 @@
     <canvas id="stars-canvas"></canvas>
 
     <section class="hero">
-        <div class="hero-badge">Conferência JAS Goiânia - Brasília</div>
-        <h1 class="hero-title">CJAS<br><em>2026</em></h1>
-        <div class="hero-divider"></div>
-        <div class="hero-info">
-            <div class="hero-info-item">
-                <div class="label">Data</div>
-                <div class="value">3 dias de encontro</div>
+
+        <!-- Emblem -->
+        <div class="emblem">
+            <svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="36" cy="36" r="35" stroke="rgba(235,190,140,0.35)" stroke-width="1"/>
+                <circle cx="36" cy="36" r="28" stroke="rgba(235,190,140,0.2)" stroke-width="0.5"/>
+                <!-- star of david style -->
+                <polygon points="36,10 42,22 55,22 45,30 49,43 36,35 23,43 27,30 17,22 30,22" fill="none" stroke="#ebbe8c" stroke-width="1" stroke-linejoin="round"/>
+                <circle cx="36" cy="36" r="4" fill="rgba(235,190,140,0.5)"/>
+            </svg>
+        </div>
+
+        <div class="hero-badge">
+            <span class="badge-dot"></span>
+            Conferência JAS · Goiânia–Brasília
+        </div>
+
+        <h1 class="hero-title">
+            CJAS
+            <span class="year">2026</span>
+        </h1>
+
+        <p class="hero-tagline">10 a 12 de Outubro</p>
+
+        <div class="divider">
+            <div class="divider-line"></div>
+            <div class="divider-diamond"></div>
+            <div class="divider-line"></div>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-card">
+                <div class="label">Início</div>
+                <div class="value">10 Out</div>
             </div>
-            <div class="hero-info-item">
-                <div class="label">Programação</div>
-                <div class="value">10/12 → 12/12</div>
+            <div class="info-card">
+                <div class="label">Duração</div>
+                <div class="value">4 Dias</div>
+            </div>
+            <div class="info-card">
+                <div class="label">Encerramento</div>
+                <div class="value">13 Out</div>
             </div>
         </div>
+
         <div class="hero-cta">
-            <a href="formulariocjas.html" class="btn-primary">Ver Programação Completa</a>
+            <a href="formulariocjas.html" class="btn-primary">
+                Ver Programação Completa
+                <span class="btn-arrow">→</span>
+            </a>
         </div>
-        <br><br>
+
         <div class="scroll-hint">
+            <div class="scroll-mouse">
+                <div class="scroll-wheel"></div>
+            </div>
             <span>Explorar</span>
-            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- About -->
+    <section class="about">
+        <div class="section-label">Sobre o evento</div>
+        <h2 class="about-heading">Um encontro para <em>crescer juntos</em></h2>
+        <p class="about-text">
+            A CJAS é a Conferência dos Jovens Adultos Solteiros das estacas de Goiânia e Brasília. 
+            Quatro dias de aprendizado, conexão e fé — moldados para jovens de 18 a 35 anos que 
+            desejam pensar celestial em cada área da vida.
+        </p>
+
+        <div class="pillars">
+            <div class="pillar-card">
+                <div class="pillar-icon">🌱</div>
+                <div class="pillar-title">Autossuficiência</div>
+                <div class="pillar-desc">Princípios práticos para uma vida independente e responsável.</div>
+            </div>
+            <div class="pillar-card">
+                <div class="pillar-icon">💼</div>
+                <div class="pillar-title">Trabalho & Carreira</div>
+                <div class="pillar-desc">Ferramentas e mentoria para o mercado profissional.</div>
+            </div>
+            <div class="pillar-card">
+                <div class="pillar-icon">📚</div>
+                <div class="pillar-title">Educação</div>
+                <div class="pillar-desc">Aprender é um mandamento eterno. Juntos descobrimos como.</div>
+            </div>
+            <div class="pillar-card">
+                <div class="pillar-icon">✝️</div>
+                <div class="pillar-title">Fé & Comunidade</div>
+                <div class="pillar-desc">Culto, serviço e laços que duram além do evento.</div>
+            </div>
         </div>
     </section>
 
     <script>
-        // Starfield canvas
+        // ── STARFIELD ──
         const canvas = document.getElementById('stars-canvas');
         const ctx = canvas.getContext('2d');
         let stars = [];
@@ -240,30 +501,31 @@
 
         function initStars() {
             stars = [];
-            const count = Math.floor((canvas.width * canvas.height) / 5000);
+            const count = Math.floor((canvas.width * canvas.height) / 4500);
             for (let i = 0; i < count; i++) {
                 stars.push({
                     x: Math.random() * canvas.width,
                     y: Math.random() * canvas.height,
-                    r: Math.random() * 1.2 + 0.2,
-                    speed: Math.random() * 0.3 + 0.05,
+                    r: Math.random() * 1.4 + 0.2,
+                    speed: Math.random() * 0.25 + 0.04,
                     opacity: Math.random(),
-                    pulse: Math.random() * Math.PI * 2
+                    pulse: Math.random() * Math.PI * 2,
+                    color: Math.random() > 0.8 ? 'rgba(235,190,140,' : 'rgba(200,220,255,'
                 });
             }
         }
 
-        function drawStars(t) {
+        function drawStars() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             for (const s of stars) {
-                s.pulse += 0.01;
-                const op = 0.3 + 0.4 * Math.sin(s.pulse);
+                s.pulse += 0.008;
+                const op = 0.15 + 0.45 * Math.abs(Math.sin(s.pulse));
                 ctx.beginPath();
                 ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(255,240,200,${op})`;
+                ctx.fillStyle = `${s.color}${op})`;
                 ctx.fill();
                 s.y += s.speed;
-                if (s.y > canvas.height) { s.y = 0; s.x = Math.random() * canvas.width; }
+                if (s.y > canvas.height) { s.y = -2; s.x = Math.random() * canvas.width; }
             }
             requestAnimationFrame(drawStars);
         }
@@ -272,6 +534,23 @@
         resize();
         initStars();
         requestAnimationFrame(drawStars);
+
+        // ── INTERSECTION OBSERVER for about ──
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.style.opacity = '1';
+                    e.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.pillar-card, .about-heading, .about-text').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(24px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
     </script>
 </body>
 </html>
